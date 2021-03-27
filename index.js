@@ -58,10 +58,24 @@ client.connect(err => {
 
     //get single product from database
     app.get('/product/:id', (req, res) => {
-        productCollection.find({ _id: ObjectId(req.params.id) }).toArray((err,doc)=>{res.send(doc[0]);})          
+        productCollection.find({ _id: ObjectId(req.params.id) }).toArray((err, doc) => { res.send(doc[0]); })
 
 
     });
+    //update data
+    app.patch('/update/:id', (req, res) => {
+        console.log(req.body.price);
+        productCollection.updateOne(
+            { _id: ObjectId(req.params.id) },
+            {
+                $set: { price: req.body.price, quantity: req.body.quantity }
+            }
+        )
+        .then(result=>{
+            console.log('will be the result obj');
+        })
+    })
+
 
     //delete data
     app.delete('/delete/:id', (req, res) => {
