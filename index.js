@@ -29,18 +29,26 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://organicUser:myMongodb123@cluster0.lroqv.mongodb.net/organicdb?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true ,connectTimeoutMS: 30000,keepAlive: 1});
 client.connect(err => {
-    const collection = client.db("organicdb").collection("products");
+    const productCollection = client.db("organicdb").collection("products");
     console.log('db connected 2nd');
 
     //get data from index.html's form and send to database
     app.post('/addProduct/',(req,res)=>{
         const product = req.body;
         // console.log(product);
-        collection.insertOne(product)
+        productCollection.insertOne(product)
         .then(result => {
             // process result
             console.log('One product added');
             res.send('data insert successfully');
+        })
+
+    });
+
+    //read all data/docs from Collection
+    app.get('/products',(req,res) => {
+        productCollection.find({}).toArray((err,documents)=>{
+            res.send(documents);
         })
 
     });
