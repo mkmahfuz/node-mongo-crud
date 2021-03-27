@@ -43,7 +43,9 @@ client.connect(err => {
             .then(result => {
                 // process result
                 console.log('One product added');
-                res.send('data insert successfully');
+                // res.send('data insert successfully');
+                //page will be reloaded
+                res.redirect('/');
             })
 
     });
@@ -72,6 +74,7 @@ client.connect(err => {
             }
         )
         .then(result=>{
+            res.send(result.modifiedCount > 0); //update is successfull 
             console.log('will be the result obj');
         })
     })
@@ -81,7 +84,8 @@ client.connect(err => {
     app.delete('/delete/:id', (req, res) => {
         productCollection.deleteOne({ _id: ObjectId(req.params.id) })
             .then((result) => {
-                console.log(result);
+                // console.log(result);
+                res.send(result.deletedCount > 0); //delete is successfull 
             })
         //console.log(req.params.id)
     });

@@ -28,11 +28,12 @@
                 .then(products => {
                     console.log(products);
                     const container = document.getElementById('products');
+                    container.innerHTML = '';
                     products.forEach(product => {
                         const item = document.createElement('p');
                         item.innerHTML = `<strong>${product.name}</strong> -- price: ${product.price} quantity: ${product.quantity}
                     <button onclick="loadProduct('${product._id}')">Update</button>
-                    <button onclick="deleteProduct('${product._id}')">Delete</button>`;
+                    <button onclick="deleteProduct(event,'${product._id}')">Delete</button>`;
                         container.appendChild(item);
                     });
                 })
@@ -70,18 +71,31 @@
                 body: JSON.stringify(product)
             })
             .then(res=>res.json())
-            .then(data=>{
+            .then(result=>{
+                if(result){
+                    loadAllProducts();
+                    const update = document.getElementById('product');
+                    update.innerHTML = '';
+
+                }
                 console.log('pd updated');
             })
             console.log('updating');
         }
 
-        function deleteProduct(id) {
+        function deleteProduct(event,id) {
+           // console.log(event.target.parentNode);
             fetch(`/delete/${id}`, {
                 method: 'DELETE'
             })
-                .then(res => res.json()).then(result => { console.log('deleted succesfully') });
-            console.log(id)
+                .then(res => res.json())
+                .then(result => { 
+                    if(result){
+                        event.target.parentNode.style.display = 'none';
+                    }
+                   // console.log('deleted succesfully')
+                 });
+            //console.log(id)
         }
 
     </script>
